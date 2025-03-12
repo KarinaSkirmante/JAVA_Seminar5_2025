@@ -33,7 +33,22 @@ public class Seminar5Application {
 			prodRepo.save(p3);
 				
 			System.out.println("Cik produkti ir DB: " + prodRepo.count());
+				//TODO
+				//izgūt arī JAVA puse visus produktus un izprintēt konsolē
+			
+				System.out.println(prodRepo.findAll());
+			
+				System.out.println(prodRepo.findById(2l).get());
 				
+				Product productFromDB = prodRepo.findById(2l).get();
+				productFromDB.setPrice(0.55f);
+				//save šeit nostrādā ka updates
+				prodRepo.save(productFromDB);
+				//paminīt kāda produkta cenu un saglavbāt izmainīto DB un apskatīteis no DB puses
+				//izdzest kādu produktu no datubāzes un pārliecināties
+				prodRepo.deleteById(2l);//dzešam gurķi
+				
+				System.out.println(prodRepo.findAll());
 			}
 		};
 		
