@@ -20,7 +20,7 @@ public class MyFirstController {
 	public String getControllerSendData(Model model)
 	{
 		System.out.println("Send data kontrolieris nostrādāja");
-		String data = "Karina ->" + rand.nextInt(0, 101);
+		String data = "Karina: " + rand.nextInt(0, 101);
 		model.addAttribute("package", data);
 		return "show-data-page";//parādīs show-data-page.html failu, kurā būs jau ievietots data vērtība
 		
