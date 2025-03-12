@@ -1,0 +1,15 @@
+<html xmlns:th="https://www.thymeleaf.org">
+
+<body>
+<p> Infoprmācija par produktu: </p>
+<p  th:text = "${package.getId()}" > </p>
+<p  th:text = "${package.getTitle()}" > </p>
+<p  th:text = "${package.getDescription()}" > </p>
+<p  th:text = "${package.getPrice()}" > </p>
+<p  th:text = "${package.getQuantity()}" > </p>
+<p  th:text = "${package.toString()}" > </p>
+
+</body>
+
+
+</html>

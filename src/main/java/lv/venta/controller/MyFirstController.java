@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import lv.venta.model.Product;
+
 @Controller
 public class MyFirstController {
 	
@@ -23,6 +25,13 @@ public class MyFirstController {
 		String data = "Karina: " + rand.nextInt(0, 101);
 		model.addAttribute("package", data);
 		return "show-data-page";//parādīs show-data-page.html failu, kurā būs jau ievietots data vērtība
+		
+	}
+	@GetMapping("/getproduct")//lolcahost:8080/getproduct
+	public String getControllerSendProduct(Model model) {
+		Product newProduct = new Product("Ābols", "Garšīgs", 0.99f, 4);
+		model.addAttribute("package", newProduct);
+		return "show-one-product";//parādīs show-one-product.html lapu, kurā būs iekļauts produkts package paciņā
 		
 	}
 	
