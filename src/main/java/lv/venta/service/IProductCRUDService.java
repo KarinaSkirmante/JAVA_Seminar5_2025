@@ -13,11 +13,11 @@ public interface IProductCRUDService {
 	//R - retrieve all
 	public abstract ArrayList<Product> retrieveAll() throws Exception;	
 	//R - retrieve by id
-	public abstract Product retrieveById(int id) throws Exception;
+	public abstract Product retrieveById(long id) throws Exception;
 	//U - update
 	public abstract void 
-	updateProductById(int id, String description, float price, int quantity) throws Exception;
+	updateProductById(long id, String description, float price, int quantity) throws Exception;
 	//D - delete
-	public abstract void deleteById(int id) throws Exception;
+	public abstract void deleteById(long id) throws Exception;
 	
 }
