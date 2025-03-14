@@ -27,12 +27,21 @@ public class ProductCRUDServiceImpl implements IProductCRUDService{
 			throw new Exception("Incorrect input params");
 		}
 		
+		if(prodRepo.existsByTitleAndDescriptionAndPrice(title, description, price))
+		{
 		
-		//TODO pāŗbaudīt, vai produkts jau eksistē
-		
-		//ja neeksistē
-		Product newProduct = new Product(title, description, price, quantity);
-		prodRepo.save(newProduct);
+			Product productExists = 
+			prodRepo.findByTitleAndDescriptionAndPrice(title, description, price);
+			
+			int newQuantity = productExists.getQuantity() + quantity;
+			productExists.setQuantity(newQuantity);
+			prodRepo.save(productExists);
+		}
+		else
+		{
+			Product newProduct = new Product(title, description, price, quantity);
+			prodRepo.save(newProduct);
+		}
 		
 	}
 
