@@ -98,6 +98,7 @@ public class ProductCRUDController {
 		{
 			Product productToUpdate = prodService.retrieveById(id);
 			model.addAttribute("product", productToUpdate);
+			model.addAttribute("title", productToUpdate.getTitle());
 			return "update-product";//parādīs update-product.hmlt
 		}catch (Exception e) {
 			model.addAttribute("package", e.getMessage());
@@ -110,6 +111,21 @@ public class ProductCRUDController {
 	public String postControllerUpdateProductById
 	(@PathVariable(name = "id") long id, @Valid Product product, BindingResult result, Model model)
 	{
+		if(result.hasErrors())
+		{
+			try
+			{
+				Product p = prodService.retrieveById(id);
+				model.addAttribute("title", p.getTitle());
+				return "update-product";
+			}catch (Exception e) {
+				model.addAttribute("package", e.getMessage());
+				return "show-error";
+			}
+			
+		}
+		
+		
 		try {
 			prodService.updateProductById(id, product.getDescription(), product.getPrice(), product.getQuantity());
 			return "redirect:/product/crud/all";//pāŗslēdzams uz all url adresi

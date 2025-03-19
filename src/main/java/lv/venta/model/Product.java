@@ -33,7 +33,7 @@ public class Product {
 	private long id;
 	
 	@Column(name = "Title")
-	@NotNull
+//	@NotNull <- tas tapēc, lai title varetu caur update nesaglabāt 
 	@Pattern(regexp = "[A-Z]{1}[a-z ]{2,15}", message = "The first symbol should be capital letter and other ones should be small letters. Total 2-15 letters.")
 	//@Size(min = 3, max = 16) <- so var izlaist, jo regex izteiksmē tas jau ir ietverts
 	private String title;
