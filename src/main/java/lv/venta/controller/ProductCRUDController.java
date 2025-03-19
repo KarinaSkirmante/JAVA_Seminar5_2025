@@ -98,7 +98,6 @@ public class ProductCRUDController {
 		{
 			Product productToUpdate = prodService.retrieveById(id);
 			model.addAttribute("product", productToUpdate);
-			model.addAttribute("title", productToUpdate.getTitle());
 			return "update-product";//parādīs update-product.hmlt
 		}catch (Exception e) {
 			model.addAttribute("package", e.getMessage());
@@ -115,8 +114,12 @@ public class ProductCRUDController {
 		{
 			try
 			{
-				Product p = prodService.retrieveById(id);
-				model.addAttribute("title", p.getTitle());
+				/*Product p = prodService.retrieveById(id);
+				p.setDescription(product.getDescription());
+				p.setPrice(product.getPrice());
+				p.setQuantity(product.getQuantity());
+				
+				model.addAttribute("product", p);*/
 				return "update-product";
 			}catch (Exception e) {
 				model.addAttribute("package", e.getMessage());
@@ -135,10 +138,23 @@ public class ProductCRUDController {
 		}
 	}
 	
-	//izveidot post mapping, kurā dabū jau updeitoto produktu (izmantojam arī validācijas)
-	//rediģet produktu caur servisu
-	//redirektojam uz /product/crud/all
-	//catch gadījuma uz show-error lapu
+	//izveiudot get mapping prieks dzesanas, kur tiek padots arī id
+	//mēģināt dzēst, bet ja ir kļudas, parādīt show-error lapu
+	
+	@GetMapping("/delete/{id}")//localhost:8080/product/crud/delete/3
+	public String getControllerDeleteProductById(@PathVariable(name = "id") long id, Model model)
+	{
+		try {
+			prodService.deleteById(id);
+			model.addAttribute("package", prodService.retrieveAll());
+			return "show-multiple-products";
+			
+		} catch (Exception e) {
+			model.addAttribute("package", e.getMessage());
+			return "show-error";
+		}
+		
+	}
 	
 	
 	
