@@ -90,7 +90,39 @@ public class ProductCRUDController {
 		
 		
 	}
+
+	@GetMapping("/update/{id}")//localhost:8080/product/crud/update/1
+	public String getControllerUpdateProductById(@PathVariable(name = "id") long id, Model model)
+	{
+		try
+		{
+			Product productToUpdate = prodService.retrieveById(id);
+			model.addAttribute("product", productToUpdate);
+			return "update-product";//parādīs update-product.hmlt
+		}catch (Exception e) {
+			model.addAttribute("package", e.getMessage());
+			return "show-error";
+		}
+	}
 	
+
+	@PostMapping("/update/{id}")
+	public String postControllerUpdateProductById
+	(@PathVariable(name = "id") long id, @Valid Product product, BindingResult result, Model model)
+	{
+		try {
+			prodService.updateProductById(id, product.getDescription(), product.getPrice(), product.getQuantity());
+			return "redirect:/product/crud/all";//pāŗslēdzams uz all url adresi
+		} catch (Exception e) {
+			model.addAttribute("package", e.getMessage());
+			return "show-error";
+		}
+	}
+	
+	//izveidot post mapping, kurā dabū jau updeitoto produktu (izmantojam arī validācijas)
+	//rediģet produktu caur servisu
+	//redirektojam uz /product/crud/all
+	//catch gadījuma uz show-error lapu
 	
 	
 	
