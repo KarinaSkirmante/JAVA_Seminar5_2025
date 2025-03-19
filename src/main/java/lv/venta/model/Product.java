@@ -24,6 +24,7 @@ import lombok.ToString;
 @Table(name = "ProductTable")
 @Entity
 public class Product {
+	//TODO ja nepieciešams, var izveidot katrai validācijas anotācijai savu meesage tekstu
 	//1. mainīgie
 	@Setter(value = AccessLevel.NONE)
 	@Column(name = "Id")
@@ -33,7 +34,7 @@ public class Product {
 	
 	@Column(name = "Title")
 	@NotNull
-	@Pattern(regexp = "[A-Z]{1}[a-z ]{2,15}")
+	@Pattern(regexp = "[A-Z]{1}[a-z ]{2,15}", message = "The first symbol should be capital letter and other ones should be small letters. Total 2-15 letters.")
 	//@Size(min = 3, max = 16) <- so var izlaist, jo regex izteiksmē tas jau ir ietverts
 	private String title;
 	
