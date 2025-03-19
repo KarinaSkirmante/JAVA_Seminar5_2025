@@ -14,7 +14,7 @@ public interface IProductFilterAndCalcService {
 	
 	
 	public abstract ArrayList<Product>
-	getAllProductsWhereTitleOrDescriptContains(String text) throws Exception;
+	getAllProductsWhereTitleOrDescriptionContains(String text) throws Exception;
 	
 	public abstract float getIncomefromProducts()throws Exception;
 
