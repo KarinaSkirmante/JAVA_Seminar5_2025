@@ -1,10 +1,14 @@
 package lv.venta.model;
 
+import org.hibernate.annotations.ManyToAny;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -38,8 +42,14 @@ public class MyUser {
 	@Column(name = "Password")
 	private String password;
 	
-	public MyUser(String username, String passord) {
+	@ManyToOne
+	@JoinColumn(name = "Ida")
+	private MyAuthority authority;
+	
+	
+	public MyUser(String username, String passord, MyAuthority authority) {
 		setUsername(username);
 		setPassword(passord);
+		setAuthority(authority);
 	}
 }
