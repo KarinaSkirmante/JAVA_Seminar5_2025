@@ -5,7 +5,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import lv.venta.model.MyAuthority;
+import lv.venta.model.MyUser;
 import lv.venta.model.Product;
+import lv.venta.repo.IMyAuthorityRepo;
+import lv.venta.repo.IMyUserRepo;
 import lv.venta.repo.IProductRepo;
 
 @SpringBootApplication
@@ -17,7 +21,7 @@ public class Seminar5Application {
 	
 	
 	@Bean
-	public CommandLineRunner testDB(IProductRepo prodRepo) {
+	public CommandLineRunner testDB(IProductRepo prodRepo, IMyUserRepo userRepo, IMyAuthorityRepo authorityRepo) {
 		
 		return new CommandLineRunner() {
 			
@@ -49,6 +53,20 @@ public class Seminar5Application {
 				prodRepo.deleteById(2l);//dzešam gurķi
 				
 				System.out.println(prodRepo.findAll());
+				
+				
+			MyAuthority a1 = new MyAuthority("USER");
+			MyAuthority a2 = new MyAuthority("ADMIN");
+			authorityRepo.save(a1);
+			authorityRepo.save(a2);
+			
+			MyUser u1 = new MyUser("Test", "1234", a1);
+			MyUser u2 = new MyUser("Administrator", "root", a2);
+			userRepo.save(u1);
+			userRepo.save(u2);
+			
+				
+				
 			}
 		};
 		
