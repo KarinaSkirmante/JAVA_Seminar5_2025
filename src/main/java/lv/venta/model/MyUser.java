@@ -33,12 +33,12 @@ public class MyUser {
 	private long idu;
 	
 	@NotNull
-	@Pattern(regexp =  "[A-Za-z.0-9]")
+	@Pattern(regexp =  "[A-Za-z.0-9]{3,30}")
 	@Column(name = "Username")
 	private String username;
 	
 	@NotNull
-	@Pattern(regexp =  "[A-Za-z0-9,./_-!@#$%^&*()]{2,100}")
+	//@Pattern(regexp =  "[A-Za-z0-9]{2,100}")
 	@Column(name = "Password")
 	private String password;
 	
