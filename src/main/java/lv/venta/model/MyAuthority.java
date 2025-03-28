@@ -18,7 +18,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
-@Table(name = "MyAuthority")
+@Table(name = "MyAuthorityTable")
 @Entity
 
 public class MyAuthority {
@@ -30,7 +30,7 @@ public class MyAuthority {
 	private long ida;
 	
 	@NotNull
-	@Pattern(regexp = "[A-Za-z :;]{3,30}")
+	@Pattern(regexp = "[A-Z]{3,10}")
 	@Column(name = "Title")
 	private String title;
 	

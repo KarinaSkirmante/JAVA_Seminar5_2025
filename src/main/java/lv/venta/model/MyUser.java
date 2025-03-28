@@ -18,7 +18,7 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @ToString
-@Table(name = "MyUser")
+@Table(name = "MyUserTable")
 @Entity
 public class MyUser {
 
@@ -29,7 +29,7 @@ public class MyUser {
 	private long idu;
 	
 	@NotNull
-	@Pattern(regexp =  "[A-Z]{1}[a-z]{3,10}([ ][A-Z]{1}[a-z]{3,10})?")
+	@Pattern(regexp =  "[A-Za-z.0-9]")
 	@Column(name = "Username")
 	private String username;
 	
