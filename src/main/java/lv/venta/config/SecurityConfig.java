@@ -15,68 +15,50 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-	
+
 	@Bean
 	public UserDetailsManager createInMemoryUsers() {
-		
+
 		PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-		
-		
-		UserDetails ud1 = User.builder()
-				.username("karina")
-				.password(encoder.encode("qwerty123"))
-				.authorities("USER")
+
+		UserDetails ud1 = User.builder().username("karina").password(encoder.encode("qwerty123")).authorities("USER")
 				.build();
-		
-		UserDetails ud2 = User.builder()
-				.username("admin")
-				.password(encoder.encode("1234"))
-				.authorities("ADMIN")
+
+		UserDetails ud2 = User.builder().username("admin").password(encoder.encode("1234")).authorities("ADMIN")
 				.build();
-		
-		UserDetails ud3 = User.builder()
-				.username("peteris")
-				.password(encoder.encode("0987"))
-				.authorities("USER")
+
+		UserDetails ud3 = User.builder().username("peteris").password(encoder.encode("0987")).authorities("USER")
 				.build();
-		
-		
-		
-		
-		InMemoryUserDetailsManager imUserDetailsMan 
-		= new InMemoryUserDetailsManager(ud1, ud2, ud3);
-		
+
+		InMemoryUserDetailsManager imUserDetailsMan = new InMemoryUserDetailsManager(ud1, ud2, ud3);
+
 		return imUserDetailsMan;
-		
-		
+
 	}
-	
+
 	@Bean
 	public SecurityFilterChain createConfigForEndpoints(HttpSecurity http) throws Exception {
-		
-		http.authorizeHttpRequests()
-			.requestMatchers("/simple").hasAuthority("USER")
-			.requestMatchers("/getdata").hasAuthority("ADMIN")
-			.requestMatchers("/getproduct").hasAuthority("ADMIN")
-			.requestMatchers("/getmultipleproducts").hasAuthority("ADMIN")
-			.requestMatchers("/product/crud/all").permitAll()
-			.requestMatchers("/product/crud/one**").permitAll()
-			.requestMatchers("/product/crud/all/**").permitAll()
-			.requestMatchers("/product/crud/create").hasAuthority("ADMIN")
-			.requestMatchers("/product/crud/update/**").hasAuthority("ADMIN")
-			.requestMatchers("/product/crud/delete/**").hasAuthority("ADMIN")
-			.requestMatchers("/product/process/price/**").hasAnyAuthority("ADMIN", "USER");
-			//TODO un parējie endpointi jeb adreses
-			
-			
-		http.formLogin().permitAll();
-		
+
+		http.authorizeHttpRequests(auth -> auth
+				.requestMatchers("/simple").hasAuthority("USER")
+				.requestMatchers("/getdata").hasAuthority("ADMIN")
+				.requestMatchers("/getproduct").hasAuthority("ADMIN")
+				.requestMatchers("/getmultipleproducts").hasAuthority("ADMIN")
+				.requestMatchers("/product/crud/all").permitAll()
+				.requestMatchers("/product/crud/one**").permitAll()
+				.requestMatchers("/product/crud/all/**").permitAll()
+				.requestMatchers("/product/crud/create").hasAuthority("ADMIN")
+				.requestMatchers("/product/crud/update/**").hasAuthority("ADMIN")
+				.requestMatchers("/product/crud/delete/**").hasAuthority("ADMIN")
+				.requestMatchers("/product/process/price/**").hasAnyAuthority("ADMIN", "USER")
+
+		);
+		// TODO un parējie endpointi jeb adreses
+
+		http.formLogin(auth -> auth.permitAll());
+
 		return http.build();
-		
-		
-		
+
 	}
-	
-	
 
 }
