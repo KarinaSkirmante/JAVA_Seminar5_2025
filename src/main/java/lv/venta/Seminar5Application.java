@@ -4,6 +4,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import lv.venta.model.MyAuthority;
 import lv.venta.model.MyUser;
@@ -53,15 +55,17 @@ public class Seminar5Application {
 				prodRepo.deleteById(2l);//dzešam gurķi
 				
 				System.out.println(prodRepo.findAll());
-				
+			
+			PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
 				
 			MyAuthority a1 = new MyAuthority("USER");
 			MyAuthority a2 = new MyAuthority("ADMIN");
 			authorityRepo.save(a1);
 			authorityRepo.save(a2);
 			
-			MyUser u1 = new MyUser("Test", "1234", a1);
-			MyUser u2 = new MyUser("Administrator", "root", a2);
+			MyUser u1 = new MyUser("Test", encoder.encode("1234"), a1);
+			MyUser u2 = new MyUser("Administrator", encoder.encode("root"), a2);
 			userRepo.save(u1);
 			userRepo.save(u2);
 			
