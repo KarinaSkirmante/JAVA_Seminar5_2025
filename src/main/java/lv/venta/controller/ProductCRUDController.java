@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.service.annotation.DeleteExchange;
 
 import jakarta.validation.Valid;
 import lv.venta.model.Product;
@@ -134,17 +136,19 @@ public class ProductCRUDController {
 	//izveiudot get mapping prieks dzesanas, kur tiek padots arī id
 	//mēģināt dzēst, bet ja ir kļudas, parādīt show-error lapu
 	
-	@GetMapping("/delete/{id}")//localhost:8080/product/crud/delete/3
-	public String getControllerDeleteProductById(@PathVariable(name = "id") long id, Model model)
+	@DeleteMapping("/delete/{id}")//localhost:8080/product/crud/delete/3
+	public ResponseEntity<?> getControllerDeleteProductById(@PathVariable(name = "id") long id)
 	{
 		try {
 			prodService.deleteById(id);
-			model.addAttribute("package", prodService.retrieveAll());
-			return "show-multiple-products";
+			ArrayList<Product> allProducts = prodService.retrieveAll();
+			ResponseEntity<ArrayList<Product>> response = 
+			new ResponseEntity<ArrayList<Product>>(allProducts, HttpStatus.OK);//atgriezīs 200 kodu + visus produkttus
+			return response;
 			
 		} catch (Exception e) {
-			model.addAttribute("package", e.getMessage());
-			return "show-error";
+			ResponseEntity<String> response = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return response;
 		}
 		
 	}
