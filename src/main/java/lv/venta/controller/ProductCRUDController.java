@@ -11,6 +11,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,7 +60,7 @@ public class ProductCRUDController {
 	}
 
 	@GetMapping("/all/{id}") // localhost:8080/product/crud/all/1
-	public ResponseEntity<?> getControllerGetOneProductById2(@PathVariable(name = "id") long id, Model model) {
+	public ResponseEntity<?> getControllerGetOneProductById2(@PathVariable(name = "id") long id) {
 
 		try {
 			Product productFound = prodService.retrieveById(id);
@@ -74,16 +76,13 @@ public class ProductCRUDController {
 	}
 	
 	
-	@GetMapping("/create")//localhost:8080/product/crud/create
-	public String getControllerCreateNewProduct(Model model) {
-		model.addAttribute("product", new Product());
-		return "create-product";//parādīs create-product.html lapu
-	}
+	
 	@PostMapping("/create")
-	public String postControllerCreateNewProduct(@Valid Product product, BindingResult result,Model model) {//tiek iegūsts jau aizpildītais produkts
+	public ResponseEntity<?> postControllerCreateNewProduct(@RequestBody @Valid Product product, BindingResult result) {//tiek iegūsts jau aizpildītais produkts
 		
 		if(result.hasErrors()) {
-			return "create-product";//ja būs validāciju pāŗkāpumi, tad paliekam tajā pašā lapā
+			ResponseEntity response = new ResponseEntity<>(result.getAllErrors(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return response;
 		}
 		
 		
@@ -91,10 +90,13 @@ public class ProductCRUDController {
 			prodService.createProduct(product.getTitle(), product.getDescription(),
 					product.getPrice(), product.getQuantity());
 			
-			return "redirect:/product/crud/all";//pāŗslēdzams uz all url adresi
+			ArrayList<Product> allProducts = prodService.retrieveAll();
+			ResponseEntity<ArrayList<Product>> response = 
+			new ResponseEntity<ArrayList<Product>>(allProducts, HttpStatus.OK);//atgriezīs 200 kodu + visus produkttus
+			return response;
 		} catch (Exception e) {
-			model.addAttribute("package", e.getMessage());
-			return "show-error";
+			ResponseEntity<String> response = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return response;
 		}
 		
 		
@@ -102,22 +104,7 @@ public class ProductCRUDController {
 		
 	}
 
-	@GetMapping("/update/{id}")//localhost:8080/product/crud/update/1
-	public String getControllerUpdateProductById(@PathVariable(name = "id") long id, Model model)
-	{
-		try
-		{
-			Product productToUpdate = prodService.retrieveById(id);
-			model.addAttribute("product", productToUpdate);
-			return "update-product";//parādīs update-product.hmlt
-		}catch (Exception e) {
-			model.addAttribute("package", e.getMessage());
-			return "show-error";
-		}
-	}
-	
-
-	@PostMapping("/update/{id}")
+	@PutMapping("/update/{id}")
 	public String postControllerUpdateProductById
 	(@PathVariable(name = "id") long id, @Valid Product product, BindingResult result, Model model)
 	{
