@@ -43,27 +43,33 @@ public class ProductCRUDController {
 	}
 
 	@GetMapping("/one") // localhost:8080/product/crud/one?id=1
-	public String getControllerGetOneProductById(@RequestParam(name = "id") long id, Model model) {
+	public ResponseEntity<?> getControllerGetOneProductById(@RequestParam(name = "id") long id) {
 		try {
 			Product productFound = prodService.retrieveById(id);
-			model.addAttribute("package", productFound);
-			return "show-one-product";
+
+			ResponseEntity<Product> response 
+			= new ResponseEntity<Product>(productFound, HttpStatus.OK);
+			return response;
+			
 		} catch (Exception e) {
-			model.addAttribute("package", e.getMessage());
-			return "show-error";
+			ResponseEntity<String> response = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return response;
 		}
 	}
 
 	@GetMapping("/all/{id}") // localhost:8080/product/crud/all/1
-	public String getControllerGetOneProductById2(@PathVariable(name = "id") long id, Model model) {
+	public ResponseEntity<?> getControllerGetOneProductById2(@PathVariable(name = "id") long id, Model model) {
 
 		try {
 			Product productFound = prodService.retrieveById(id);
-			model.addAttribute("package", productFound);
-			return "show-one-product";
+
+			ResponseEntity<Product> response 
+			= new ResponseEntity<Product>(productFound, HttpStatus.OK);
+			return response;
+			
 		} catch (Exception e) {
-			model.addAttribute("package", e.getMessage());
-			return "show-error";
+			ResponseEntity<String> response = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return response;
 		}
 	}
 	
