@@ -3,6 +3,8 @@ package lv.venta.controller;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,12 +13,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 import lv.venta.model.Product;
 import lv.venta.service.IProductCRUDService;
 
-@Controller
+@RestController
 @RequestMapping("/product/crud")
 public class ProductCRUDController {
 
@@ -24,16 +27,18 @@ public class ProductCRUDController {
 	private IProductCRUDService prodService;
 
 	@GetMapping("/all") // localhost:8080/product/crud/all
-	public String getControllerGetAllProducts(Model model) {
+	public ResponseEntity<?> getControllerGetAllProducts() {
 
 		try {
 			ArrayList<Product> allProducts = prodService.retrieveAll();
-			model.addAttribute("package", allProducts);
-			return "show-multiple-products";
+			ResponseEntity<ArrayList<Product>> response = 
+			new ResponseEntity<ArrayList<Product>>(allProducts, HttpStatus.OK);//atgriezīs 200 kodu + visus produkttus
+			return response;
 
 		} catch (Exception e) {
-			model.addAttribute("package", e.getMessage());
-			return "show-error";
+			ResponseEntity<String> response = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return response;
+			
 		}
 	}
 
