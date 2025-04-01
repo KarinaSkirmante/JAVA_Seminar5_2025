@@ -105,34 +105,29 @@ public class ProductCRUDController {
 	}
 
 	@PutMapping("/update/{id}")
-	public String postControllerUpdateProductById
-	(@PathVariable(name = "id") long id, @Valid Product product, BindingResult result, Model model)
+	public ResponseEntity<?> postControllerUpdateProductById
+	(@PathVariable(name = "id") long id, @RequestBody @Valid Product product, BindingResult result)
 	{
 		if(result.hasErrors())
 		{
-			try
-			{
-				/*Product p = prodService.retrieveById(id);
-				p.setDescription(product.getDescription());
-				p.setPrice(product.getPrice());
-				p.setQuantity(product.getQuantity());
-				
-				model.addAttribute("product", p);*/
-				return "update-product";
-			}catch (Exception e) {
-				model.addAttribute("package", e.getMessage());
-				return "show-error";
-			}
+			ResponseEntity response = new ResponseEntity<>(result.getAllErrors(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return response;
 			
 		}
 		
 		
 		try {
 			prodService.updateProductById(id, product.getDescription(), product.getPrice(), product.getQuantity());
-			return "redirect:/product/crud/all";//pāŗslēdzams uz all url adresi
+			Product productFromDB = prodService.retrieveById(id);
+			ResponseEntity<Product> response
+			= new ResponseEntity<Product>(productFromDB, HttpStatus.OK);
+			
+			return response;
+			
+			
 		} catch (Exception e) {
-			model.addAttribute("package", e.getMessage());
-			return "show-error";
+			ResponseEntity<String> response = new ResponseEntity<String>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+			return response;
 		}
 	}
 	
